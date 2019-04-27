@@ -15,6 +15,7 @@ BarChartWindow::BarChartWindow(QWidget *parent, Eigen::MatrixXd *_pi_matrix_h) :
 
         ui->toolBar->addAction("Back", this, &BarChartWindow::backButtonTriggered);
 
+        //QSpinBox* spinbox = new QSpinBox(this);
         spinbox->setMinimum(0);
         spinbox->setMaximum(pi_matrix_h->rows() - 1);
         spinbox->setValue(0);
@@ -30,7 +31,6 @@ BarChartWindow::BarChartWindow(QWidget *parent, Eigen::MatrixXd *_pi_matrix_h) :
         ui->barChart->xAxis->setRange(-0.5, pi_matrix_h->cols() - 0.5);
         ui->barChart->yAxis->setRange(0,1);
 
-        // Someday, maybe... I'll add zoom and drag
         //ui->barChart->setInteraction(QCP::iRangeDrag, true);
         //ui->barChart->setInteraction(QCP::iRangeZoom, true);
 
@@ -48,6 +48,7 @@ BarChartWindow::BarChartWindow(QWidget *parent, Eigen::MatrixXd *_pi_matrix_h) :
 
         prob_bars->setData(keyData, valueData, true);
 
+        //ui->barChart->rescaleAxes();
         ui->barChart->replot();
     }
 }
@@ -75,6 +76,7 @@ void BarChartWindow::updateChart(int iter)
 
     prob_bars->setData(keyData, valueData, true);
 
+    //ui->barChart->rescaleAxes();
     ui->barChart->replot();
 
 }
