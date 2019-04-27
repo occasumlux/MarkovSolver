@@ -1,0 +1,11 @@
+#Mode
+CMPC
+#Number of states, iterations, t
+4, 75, 1.1
+#Initial vector
+1,0,0,0
+#Q matrix
+-3,3,0,0
+8,-11,3,0
+0,8,-11,3
+0,0,8,-8
