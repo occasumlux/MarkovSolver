@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "tableview.hpp"
 #include "barchartwindow.hpp"
+#include "mmmdialog.hpp"
+#include "mer1dialog.hpp"
 
 #include <QFileDialog>
 #include <QFile>
@@ -32,11 +34,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QTableWidgetItem* probs_item = new QTableWidgetItem("0");
     ui->probs_table->setItem(0, 0, probs_item);
 
-    probs_matrix = Eigen::MatrixXd::Zero(1,1);
-    q_matrix     = Eigen::MatrixXd::Zero(1,1);
-    pi_f         = Eigen::MatrixXd::Zero(1,1);
-    pi_vector    = Eigen::MatrixXd::Zero(1,1);
-    pi_matrix_h  = Eigen::MatrixXd::Zero(1,1);
+    probs_matrix    = Eigen::MatrixXd::Zero(1,1);
+    q_matrix        = Eigen::MatrixXd::Zero(1,1);
+    pi_f            = Eigen::MatrixXd::Zero(1,1);
+    pi_vector       = Eigen::MatrixXd::Zero(1,1);
+    pi_vector_queue = Eigen::MatrixXd::Zero(1,1);
+    pi_matrix_h     = Eigen::MatrixXd::Zero(1,1);
 }
 
 MainWindow::~MainWindow()
@@ -301,22 +304,34 @@ void MainWindow::on_setButton_clicked()
 
 void MainWindow::on_solveButton_clicked()
 {
-
+    // TODO: Include partition size in GUI
+    // Or a way to calculate more than one pi(t)
+    int partitions = 10;
     int iters = ui->spinBox_2->value();
     int dims = ui->spinBox->value();
     QString current_mode = ui->comboBox->currentText();
     double t = ui->t_SpinBox->value();
-    double max = 1;
+    double lambda_max = 1;
 
     if (current_mode == "CMPC") {
         //Find max in diag
-        //std::cout << q_matrix.diagonal().array().abs().maxCoeff() << std::endl;
-        max = q_matrix.diagonal().array().abs().maxCoeff();
-        probs_matrix = Eigen::MatrixXd::Identity(dims, dims) + q_matrix / max;
+        lambda_max = q_matrix.diagonal().array().abs().maxCoeff();
+        probs_matrix = Eigen::MatrixXd::Identity(dims, dims) + q_matrix / lambda_max;
     }
 
-    double lambda = max * t;
+    double lambda_t = lambda_max * t;
+    if (current_mode == "CMPC") {
+        // Compute minimum n for desired error level
+        // TODO: Put error level in GUI
+        int n = n_for_error(0.000001, lambda_t);
+        if (n > iters) {
+            iters = n;
+            ui->spinBox_2->setValue(iters);
+        }
+        //iters = (n > iters) ? n : iters;
+    }
 
+    // C.K eq
     for (int i = 1; i < iters; ++i) {
         pi_matrix_h.row(i) = pi_matrix_h.row(i - 1) * probs_matrix;
     }
@@ -332,9 +347,11 @@ void MainWindow::on_solveButton_clicked()
     chart->setWindowTitle("CMPD Transition Charts");
 
     if (current_mode == "CMPC") {
-        pi_f = Eigen::MatrixXd::Zero(1, dims);
+        pi_f = Eigen::MatrixXd::Zero(partitions, dims);
         for (int i = 0; i < iters; ++i) {
-            pi_f += pi_matrix_h.row(i) * poisson(i, lambda);
+            for (int k = 0; k < partitions; ++k) {
+                pi_f.row(k) += pi_matrix_h.row(i) * poisson(i, lambda_t * (k + 1)/partitions);
+            }
         }
         std::cout << pi_f << std::endl;
 
@@ -383,4 +400,113 @@ void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)
 double MainWindow::poisson(double n, double lambda)
 {
     return std::exp(n * std::log(lambda) - std::lgamma(n + 1.0) - lambda);
+}
+
+int MainWindow::n_for_error(double error, double lambda_t)
+{
+    int n = 0;
+    double cumulative_prob = 0;
+    while(cumulative_prob < 1 - error) {
+        cumulative_prob += poisson(n, lambda_t);
+        ++n;
+    }
+    return n;
+}
+
+int MainWindow::factorial(int n)
+{
+    return (n == 0 || n == 1) ? 1 : factorial(n - 1) * n;
+}
+
+void MainWindow::on_actionM_M_m_triggered()
+{
+    // Open new window
+    MMmDialog dialog(this);
+    if ( dialog.exec() == QDialog::Accepted) {
+        int m = dialog.getM();
+        int k = dialog.getK();
+        double lambda = dialog.getLambda();
+        double mu = dialog.getMu();
+
+        double rho = lambda / (m * mu);
+        double l_mu = lambda / mu;
+
+        // Compute probabilities
+         pi_vector_queue = Eigen::MatrixXd::Zero(k + 1, 1); //Eigen::VectorXd(k);
+         pi_vector_queue(0,0) = 0;
+         // pi_0 calculation
+         pi_vector_queue(0,0) += 1;
+         for (int i = 1; i <= m - 1; ++i) {
+             pi_vector_queue(0,0) += std::pow(m*rho, i) / factorial(i);
+         }
+         pi_vector_queue(0,0) += std::pow(m * rho, m) / ( factorial(m) * (1 - rho) );
+         pi_vector_queue(0,0) = 1 / pi_vector_queue(0,0);
+         // pi_k calculation
+         for (int i = 1; i <= k; ++i) {
+             if (i < m) {
+                 pi_vector_queue(i,0) = pi_vector_queue(i-1,0) * l_mu / (i+1);
+             }
+             else {
+                 pi_vector_queue(i,0) = pi_vector_queue(i-1,0) * rho;
+             }
+         }
+
+         // Show graph (?)
+         TableView* tab = new TableView(this, pi_vector_queue);
+         tab->setWindowTitle("M/M/m values");
+         tab->show();
+         BarChartWindow* chart = new BarChartWindow(this, &pi_vector_queue);
+         chart->setWindowTitle("M/M/m Result Chart");
+         chart->show();
+
+    }
+}
+
+void MainWindow::on_action_M_Er_1_triggered()
+{
+    // Open new window
+    MEr1Dialog dialog(this);
+    if ( dialog.exec() == QDialog::Accepted) {
+        int r = dialog.getR();
+        int k = dialog.getK();
+        double lambda = dialog.getLambda();
+        double mu = dialog.getMu();
+
+        double rho = lambda / (r * mu);
+        double rho_0 = lambda / mu;
+
+        // Stages to calculate
+        int stages = k * r + 1;
+
+        // Compute probabilities
+        // Result vector, for number of users
+         pi_vector_queue = Eigen::MatrixXd::Zero(k + 1, 1); //Eigen::VectorXd(k);
+         // Temporary vector, for number of remaining stages
+         Eigen::MatrixXd pi_vector_queue_t = Eigen::MatrixXd::Zero(stages + 1, 1);
+         // pi_0 calculation (both)
+         pi_vector_queue(0,0) = 1 - rho_0;
+         pi_vector_queue_t(0,0) = 1 - rho_0;
+         // pi_i calculation (stages)
+         for (int i = 1; i <= stages; ++i) {
+             int j = (i - r < 0) ? 0 : i - r;
+             pi_vector_queue_t(i,0) = rho * pi_vector_queue_t.block(j, 0, i-j, 1).sum(); // i-1-j (Equation) +1 (Block asks size, not position)
+             std::cout << "j: " << j << " i-1-j: " << i-1-j << std::endl;
+             std::cout << "pi_vector_queue.block\n" << pi_vector_queue_t.block(j, 0, i-j, 1) << std::endl;
+         }
+         std::cout << "pi_vector_queue\n" << pi_vector_queue_t << std::endl;
+
+         //pi_k calculation (users)
+         for(int i = 1; i <= k; ++i) {
+             pi_vector_queue(i,0) = pi_vector_queue_t(i*r + 1, 0) / rho;
+         }
+
+         // Show graph (?)
+         TableView* tab = new TableView(this, pi_vector_queue);
+         tab->setWindowTitle("M/M/m values");
+         tab->show();
+         BarChartWindow* chart = new BarChartWindow(this, &pi_vector_queue);
+         chart->setWindowTitle("M/M/m Result Chart");
+         chart->show();
+
+    }
 }

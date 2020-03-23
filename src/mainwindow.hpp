@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "eigen3/Eigen/Dense"
+#include "../eigen3/Eigen/Dense"
 #include <cmath>
 
 namespace Ui {
@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -31,13 +31,20 @@ private slots:
 
     void on_comboBox_currentIndexChanged(const QString &arg1);
 
+    void on_actionM_M_m_triggered();
+
+    void on_action_M_Er_1_triggered();
+
 private:
     double poisson(double n, double lambda);
+    int n_for_error(double error, double lambda_t);
+    int factorial(int n);
     Ui::MainWindow *ui;
     Eigen::MatrixXd probs_matrix;
     Eigen::MatrixXd q_matrix;
     Eigen::MatrixXd pi_f;
     Eigen::MatrixXd pi_vector;
+    Eigen::MatrixXd pi_vector_queue;
     Eigen::MatrixXd pi_matrix_h;
 };
 

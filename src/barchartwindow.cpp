@@ -2,6 +2,7 @@
 #include "ui_barchartwindow.h"
 
 #include <QVector>
+#include <iostream>
 
 BarChartWindow::BarChartWindow(QWidget *parent, Eigen::MatrixXd *_pi_matrix_h) :
     QMainWindow(parent),
@@ -60,6 +61,7 @@ BarChartWindow::~BarChartWindow()
 
 void BarChartWindow::updateChart(int iter)
 {
+    //std::cout << "pi_matrix_h->cols() = " << pi_matrix_h->cols() << "\n";
     ui->barChart->clearPlottables();
     ui->barChart->xAxis->setRange(-0.5, pi_matrix_h->cols() - 0.5);
     ui->barChart->yAxis->setRange(0,1);

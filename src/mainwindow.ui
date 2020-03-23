@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
+    <width>500</width>
     <height>353</height>
    </rect>
   </property>
@@ -99,8 +99,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>414</width>
-     <height>23</height>
+     <width>500</width>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -111,7 +111,15 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuQueueing">
+    <property name="title">
+     <string>&amp;Queueing</string>
+    </property>
+    <addaction name="actionM_M_m"/>
+    <addaction name="action_M_Er_1"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuQueueing"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionLoad">
@@ -125,6 +133,16 @@
   <action name="actionExit">
    <property name="text">
     <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="actionM_M_m">
+   <property name="text">
+    <string>&amp;M/M/m</string>
+   </property>
+  </action>
+  <action name="action_M_Er_1">
+   <property name="text">
+    <string>&amp;M/Er/1</string>
    </property>
   </action>
  </widget>
