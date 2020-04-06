@@ -1,0 +1,665 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     26923,        657]
+NotebookOptionsPosition[     24139,        596]
+NotebookOutlinePosition[     24518,        612]
+CellTagsIndexPosition[     24475,        609]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["a", "k"], TraditionalForm]],ExpressionUUID->
+  "51de6579-6bca-499d-a334-8bddf254b2f2"],
+ " Generator"
+}], "Title",
+ CellChangeTimes->{{3.7939968297518773`*^9, 3.7939968709448504`*^9}, {
+  3.7939969020643687`*^9, 3.7939969056106873`*^9}, {3.7939970526761384`*^9, 
+  3.7939970931745324`*^9}},
+ TextAlignment->Center,ExpressionUUID->"81cfb96c-65eb-4bf5-843f-c5d881430373"],
+
+Cell["\<\
+Author : D. Hern\[AAcute]ndez
+For IPD436\
+\>", "Author",
+ CellChangeTimes->{{3.7939986779545856`*^9, 
+  3.79399871044634*^9}},ExpressionUUID->"7c54fbdf-16f3-4e1d-ad4b-\
+fef727f266b8"],
+
+Cell[CellGroupData[{
+
+Cell["Exponential Distribution", "Section",
+ CellChangeTimes->{{3.7939969710873356`*^9, 3.7939970043190145`*^9}, {
+  3.793997303513118*^9, 
+  3.7939973096176414`*^9}},ExpressionUUID->"ebbc57ac-e561-4289-a950-\
+446841c04228"],
+
+Cell[CellGroupData[{
+
+Cell["Function definition", "Subsection",
+ CellChangeTimes->{{3.7939974761378765`*^9, 
+  3.7939974819480524`*^9}},ExpressionUUID->"139538ad-8aa4-4547-af51-\
+c9a2d0564589"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"akExp", "[", 
+   RowBox[{"k_", ",", " ", "\[Lambda]_", ",", " ", "\[Mu]_"}], "]"}], ":=", 
+  " ", 
+  RowBox[{
+   SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+   RowBox[{
+    FractionBox[
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[Lambda]", " ", "x"}], ")"}], "k"], 
+     RowBox[{"k", "!"}]], 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{
+      RowBox[{"-", "\[Lambda]"}], " ", "x"}]], 
+    RowBox[{"PDF", "[", 
+     RowBox[{
+      RowBox[{"ExponentialDistribution", "[", "\[Mu]", "]"}], ",", "x"}], 
+     "]"}], 
+    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExakExp", "[", 
+   RowBox[{
+   "k_", ",", " ", "\[Lambda]_", ",", " ", "\[Mu]_", ",", " ", "iters_"}], 
+   "]"}], ":=", " ", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"k", "+", "1"}], " ", "\[LessEqual]", " ", "iters"}], " ", 
+     "\[And]", " ", 
+     RowBox[{"0", "<", 
+      RowBox[{
+       RowBox[{"Mean", "[", 
+        RowBox[{"PoissonDistribution", "[", "\[Lambda]", "]"}], "]"}], "*", 
+       " ", 
+       RowBox[{"Mean", "[", 
+        RowBox[{"ExponentialDistribution", "[", "\[Mu]", "]"}], "]"}]}], " ", 
+      "<", " ", "1"}]}], ",", " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t", 
+    RowBox[{"Export", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", 
+         RowBox[{"StringJoin", "[", 
+          RowBox[{"\"\<akExp_\>\"", ",", " ", 
+           RowBox[{"ToString", "[", "k", "]"}], ",", " ", "\"\<_\>\"", ",", 
+           " ", 
+           RowBox[{"ToString", "[", "\[Lambda]", "]"}], ",", " ", "\"\<_\>\"",
+            ",", " ", 
+           RowBox[{"ToString", "[", "\[Mu]", "]"}], ",", " ", "\"\<_\>\"", 
+           ",", " ", 
+           RowBox[{"ToString", "[", "iters", "]"}], ",", " ", 
+           "\"\<.txt\>\""}], "]"}]}], "}"}], "]"}], ",", " ", 
+      "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<# Poisson lambda\>\"", ",", " ", "\[Lambda]", ",", " ", 
+          "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          "\"\<# Distribution E[x]\>\"", ",", " ", 
+          RowBox[{"N", "[", 
+           RowBox[{
+            RowBox[{"Mean", "[", 
+             RowBox[{"ExponentialDistribution", "[", "\[Mu]", "]"}], "]"}], 
+            ",", " ", "16"}], "]"}], ",", " ", "\[IndentingNewLine]", 
+          "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          "\"\<# Number of states to compute\>\"", ",", " ", "iters", ",", 
+          " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          RowBox[{"\"\<# ak Values from 0 to \>\"", "<>", 
+           RowBox[{"ToString", "[", "k", "]"}]}]}], "}"}], ",", 
+        RowBox[{"N", "[", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"akExp", "[", 
+             RowBox[{"i", ",", " ", "\[Lambda]", ",", " ", "\[Mu]"}], "]"}], 
+            ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", " ", "0", ",", " ", "k"}], "}"}]}], "]"}], ",",
+           " ", "16"}], "]"}]}], "]"}], ",", " ", "\"\<Table\>\""}], "]"}], 
+    ",", " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t", 
+    RowBox[{
+    "Print", "[", "\"\<Check k, iters or \[Lambda]*E[x] < 1\>\"", "]"}]}], 
+   "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.793999675014885*^9, 3.7939997284148083`*^9}, {
+   3.7939999043710833`*^9, 3.793999950280984*^9}, {3.7940000029606876`*^9, 
+   3.7940000226807237`*^9}, {3.794000097165319*^9, 3.794000188566544*^9}, {
+   3.7940002990408726`*^9, 3.794000452369435*^9}, {3.794001324878765*^9, 
+   3.7940013375789685`*^9}, {3.7940015311888456`*^9, 3.793991040551447*^9}, {
+   3.7939974212772255`*^9, 3.793997453134837*^9}, 3.795127564577677*^9, {
+   3.7951276662043514`*^9, 3.795127814971307*^9}, {3.7951278543541574`*^9, 
+   3.7951278851387854`*^9}, {3.7951279293616953`*^9, 
+   3.7951279421036367`*^9}, {3.795128797592803*^9, 3.7951288055503263`*^9}, {
+   3.795128895138359*^9, 3.7951289049265757`*^9}, {3.795129167580518*^9, 
+   3.795129172020379*^9}, {3.7951293553208065`*^9, 3.7951293931467676`*^9}, {
+   3.7951294864188285`*^9, 3.795129496134528*^9}, {3.79512960641547*^9, 
+   3.7951296066498013`*^9}, {3.7951296420155582`*^9, 
+   3.7951296510193872`*^9}, {3.7951296813177986`*^9, 3.795129786034379*^9}, {
+   3.7951298263161955`*^9, 3.7951298959294605`*^9}, {3.795130277806728*^9, 
+   3.795130278369008*^9}, {3.795130471808035*^9, 3.7951304944634237`*^9}, {
+   3.7951305308901587`*^9, 3.7951305457164445`*^9}, {3.7951305930714293`*^9, 
+   3.795130724280093*^9}, {3.7951308110384336`*^9, 3.7951308129920225`*^9}, {
+   3.795130972709262*^9, 3.795130988281932*^9}, {3.795132110370376*^9, 
+   3.795132117113752*^9}, {3.795132147488335*^9, 3.795132169137535*^9}, {
+   3.7951322980330048`*^9, 3.7951323020715485`*^9}, {3.795132432994934*^9, 
+   3.7951324377377396`*^9}, {3.795132480503866*^9, 3.7951324886263294`*^9}, {
+   3.7951326430293894`*^9, 3.795132643216854*^9}, {3.7951328600544233`*^9, 
+   3.7951328640106907`*^9}, {3.7951329210373693`*^9, 
+   3.7951329228338876`*^9}, {3.795135542253284*^9, 3.7951356170396743`*^9}, {
+   3.7951356486505547`*^9, 3.795135737266837*^9}, {3.795135794641065*^9, 
+   3.7951357995242157`*^9}, {3.795136324048442*^9, 3.795136324220215*^9}, {
+   3.795136678035269*^9, 3.7951367123725977`*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"2e520163-3898-46b4-9d5f-40954224f2a2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Function evaluation and data exporting", "Subsection",
+ CellChangeTimes->{{3.7939974967666388`*^9, 3.793997513440598*^9}, {
+  3.7939977597423067`*^9, 
+  3.7939977646623936`*^9}},ExpressionUUID->"87b7bb02-d05e-4cf6-b656-\
+86e98816a31e"],
+
+Cell[BoxData[
+ RowBox[{"ExakExp", "[", 
+  RowBox[{"50", ",", " ", "1", ",", " ", "2", ",", " ", "51"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.7951291833907957`*^9, 3.7951292633167887`*^9}, {
+   3.795129962977969*^9, 3.7951299699607863`*^9}, {3.795130731186225*^9, 
+   3.7951307416972065`*^9}, 3.7951308018211937`*^9, {3.7951356327295823`*^9, 
+   3.795135632776576*^9}, {3.7951357597091007`*^9, 3.7951357597559342`*^9}},
+ CellLabel->"In[3]:=",ExpressionUUID->"7a9393b3-35d0-410a-ab22-6f992e445247"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Erlang Distribution", "Section",
+ CellChangeTimes->{{3.7939970215548973`*^9, 3.7939970314037724`*^9}, {
+  3.793997314519763*^9, 
+  3.793997318419063*^9}},ExpressionUUID->"8f16fd3f-aa81-40b8-a068-\
+d31e1cf8c90f"],
+
+Cell[CellGroupData[{
+
+Cell["Function definition", "Subsection",
+ CellChangeTimes->{{3.7939974761378765`*^9, 
+  3.7939974819480524`*^9}},ExpressionUUID->"03f94dca-49d0-4fae-ae2c-\
+11a13580f7f3"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"akErl", "[", 
+   RowBox[{"k_", ",", " ", "\[Lambda]_", ",", " ", "\[Mu]_", ",", " ", "r_"}],
+    "]"}], ":=", " ", 
+  RowBox[{
+   SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+   RowBox[{
+    FractionBox[
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[Lambda]", " ", "x"}], ")"}], "k"], 
+     RowBox[{"k", "!"}]], 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{
+      RowBox[{"-", "\[Lambda]"}], " ", "x"}]], 
+    RowBox[{"PDF", "[", 
+     RowBox[{
+      RowBox[{"ErlangDistribution", "[", 
+       RowBox[{"r", ",", " ", "\[Mu]"}], "]"}], ",", "x"}], "]"}], 
+    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExakErl", "[", 
+   RowBox[{
+   "k_", ",", " ", "\[Lambda]_", ",", " ", "\[Mu]_", ",", " ", "r_", ",", " ",
+     "iters_"}], "]"}], ":=", " ", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"k", "+", "1"}], " ", "\[LessEqual]", " ", "iters"}], " ", 
+     "\[And]", "  ", 
+     RowBox[{"0", "<", 
+      RowBox[{
+       RowBox[{"Mean", "[", 
+        RowBox[{"PoissonDistribution", "[", "\[Lambda]", "]"}], "]"}], "*", 
+       " ", 
+       RowBox[{"Mean", "[", 
+        RowBox[{"ErlangDistribution", "[", 
+         RowBox[{"r", ",", "\[Mu]"}], "]"}], "]"}]}], " ", "<", " ", "1"}]}], 
+    ",", " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t", 
+    RowBox[{"Export", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", 
+         RowBox[{"StringJoin", "[", 
+          RowBox[{"\"\<akErl_\>\"", ",", " ", 
+           RowBox[{"ToString", "[", "k", "]"}], ",", " ", "\"\<_\>\"", ",", 
+           " ", 
+           RowBox[{"ToString", "[", "\[Lambda]", "]"}], ",", " ", "\"\<_\>\"",
+            ",", " ", 
+           RowBox[{"ToString", "[", "\[Mu]", "]"}], ",", " ", "\"\<_\>\"", 
+           ",", " ", 
+           RowBox[{"ToString", "[", "r", "]"}], ",", " ", "\"\<_\>\"", ",", 
+           "  ", 
+           RowBox[{"ToString", "[", "iters", "]"}], ",", " ", 
+           "\"\<.txt\>\""}], "]"}]}], "}"}], "]"}], ",", " ", 
+      "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<# Poisson lambda\>\"", ",", " ", "\[Lambda]", ",", " ", 
+          "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          "\"\<# Distribution E[x]\>\"", ",", " ", 
+          RowBox[{"N", "[", 
+           RowBox[{
+            RowBox[{"Mean", "[", 
+             RowBox[{"ErlangDistribution", "[", 
+              RowBox[{"r", ",", "\[Mu]"}], "]"}], "]"}], ",", " ", "16"}], 
+           "]"}], ",", " ", "\[IndentingNewLine]", 
+          "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          "\"\<# Number of states to compute\>\"", ",", " ", "iters", ",", 
+          " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          RowBox[{"\"\<# ak Values from 0 to \>\"", "<>", 
+           RowBox[{"ToString", "[", "k", "]"}]}]}], "}"}], ",", 
+        RowBox[{"N", "[", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"akErl", "[", 
+             RowBox[{
+             "i", ",", " ", "\[Lambda]", ",", " ", "\[Mu]", ",", " ", "r"}], 
+             "]"}], ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", " ", "0", ",", " ", "k"}], "}"}]}], "]"}], ",",
+           " ", "16"}], "]"}]}], "]"}], ",", " ", "\"\<Table\>\""}], "]"}], 
+    ",", " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t", 
+    RowBox[{
+    "Print", "[", "\"\<Check k, iters or \[Lambda]*E[x] < 1\>\"", "]"}]}], 
+   "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.795132702093934*^9, 3.7951328180516233`*^9}, {
+   3.795132870575095*^9, 3.7951329289894304`*^9}, 3.79513578407876*^9, {
+   3.795135831151396*^9, 3.7951358810659986`*^9}, {3.79513631522563*^9, 
+   3.7951363171082425`*^9}, {3.7951367635894423`*^9, 3.7951367911013947`*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"717444fe-6f69-42e4-8394-cfb7a14b21a2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Function evaluation and data exporting", "Subsection",
+ CellChangeTimes->{{3.7939974967666388`*^9, 3.793997513440598*^9}, {
+  3.7939977597423067`*^9, 
+  3.7939977646623936`*^9}},ExpressionUUID->"cdc950a4-79f3-48bb-b813-\
+861154d19482"],
+
+Cell[BoxData[
+ RowBox[{"ExakErl", "[", 
+  RowBox[{"50", ",", " ", "1", ",", "2", ",", "1", ",", "51"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.7939959169206896`*^9, 3.793995948611755*^9}, {
+  3.793996159996179*^9, 3.793996186374793*^9}, {3.7939962214152365`*^9, 
+  3.7939963014323635`*^9}, {3.7939963998087893`*^9, 3.79399645344073*^9}, {
+  3.793996563819003*^9, 3.793996579111272*^9}, {3.7939978295827637`*^9, 
+  3.7939978471107597`*^9}, {3.793997879304146*^9, 3.793997879929219*^9}, {
+  3.795132944202665*^9, 3.795132993825828*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"2ba7c434-af7d-4950-b86b-57829ba9f717"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["LogNormal Distribution", "Section",
+ CellChangeTimes->{{3.793997395392852*^9, 3.7939974011302276`*^9}, {
+  3.7951348632729163`*^9, 
+  3.795134863913417*^9}},ExpressionUUID->"885a8365-5193-4a4f-a268-\
+b5432709e52d"],
+
+Cell[CellGroupData[{
+
+Cell["Function definition", "Subsection",
+ CellChangeTimes->{{3.7939974967666388`*^9, 3.793997513440598*^9}, {
+  3.7939977597423067`*^9, 3.7939977646623936`*^9}, {3.7939978120582438`*^9, 
+  3.793997813783082*^9}},ExpressionUUID->"be120c61-d743-4656-a8a7-\
+f796dcb08ebd"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"akLog", "[", 
+   RowBox[{
+   "k_", ",", " ", "\[Lambda]_", ",", " ", "\[Mu]_", ",", " ", "\[Sigma]_"}], 
+   "]"}], ":=", " ", 
+  RowBox[{
+   SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+   RowBox[{
+    FractionBox[
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[Lambda]", " ", "x"}], ")"}], "k"], 
+     RowBox[{"k", "!"}]], 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{
+      RowBox[{"-", "\[Lambda]"}], " ", "x"}]], 
+    RowBox[{"PDF", "[", 
+     RowBox[{
+      RowBox[{"LogNormalDistribution", "[", 
+       RowBox[{"\[Mu]", ",", " ", "\[Sigma]"}], "]"}], ",", "x"}], "]"}], 
+    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExakLog", "[", 
+   RowBox[{
+   "k_", ",", " ", "\[Lambda]_", ",", " ", "\[Mu]_", ",", " ", "\[Sigma]_", 
+    ",", " ", "iters_"}], "]"}], ":=", " ", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"k", "+", "1"}], " ", "\[LessEqual]", " ", "iters"}], " ", 
+     "\[And]", "  ", 
+     RowBox[{"0", "<", 
+      RowBox[{
+       RowBox[{"Mean", "[", 
+        RowBox[{"PoissonDistribution", "[", "\[Lambda]", "]"}], "]"}], "*", 
+       " ", 
+       RowBox[{"Mean", "[", 
+        RowBox[{"LogNormalDistribution", "[", 
+         RowBox[{"\[Mu]", ",", " ", "\[Sigma]"}], "]"}], "]"}]}], " ", "<", 
+      " ", "1"}]}], ",", " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t", 
+    RowBox[{"Export", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", 
+         RowBox[{"StringJoin", "[", 
+          RowBox[{"\"\<akLog_\>\"", ",", " ", 
+           RowBox[{"ToString", "[", "k", "]"}], ",", " ", "\"\<_\>\"", ",", 
+           " ", 
+           RowBox[{"ToString", "[", "\[Lambda]", "]"}], ",", " ", "\"\<_\>\"",
+            ",", " ", 
+           RowBox[{"ToString", "[", "\[Mu]", "]"}], ",", " ", "\"\<_\>\"", 
+           ",", " ", 
+           RowBox[{"ToString", "[", "\[Sigma]", "]"}], ",", " ", "\"\<_\>\"", 
+           ",", "  ", 
+           RowBox[{"ToString", "[", "iters", "]"}], ",", " ", 
+           "\"\<.txt\>\""}], "]"}]}], "}"}], "]"}], ",", " ", 
+      "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<# Poisson lambda\>\"", ",", " ", "\[Lambda]", ",", " ", 
+          "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t       ", 
+          "\"\<# Distribution E[x]\>\"", ",", " ", 
+          RowBox[{"N", "[", 
+           RowBox[{
+            RowBox[{"Mean", "[", 
+             RowBox[{"LogNormalDistribution", "[", 
+              RowBox[{"\[Mu]", ",", " ", "\[Sigma]"}], "]"}], "]"}], ",", " ",
+             "16"}], "]"}], ",", " ", "\[IndentingNewLine]", 
+          "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          "\"\<# Number of states to compute\>\"", ",", " ", "iters", ",", 
+          " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          RowBox[{"\"\<# ak Values from 0 to \>\"", "<>", 
+           RowBox[{"ToString", "[", "k", "]"}]}]}], "}"}], ",", 
+        RowBox[{"N", "[", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"akLog", "[", 
+             RowBox[{
+             "i", ",", " ", "\[Lambda]", ",", " ", "\[Mu]", ",", " ", 
+              "\[Sigma]"}], "]"}], ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", " ", "0", ",", " ", "k"}], "}"}]}], "]"}], ",",
+           " ", "16"}], "]"}]}], "]"}], ",", " ", "\"\<Table\>\""}], "]"}], 
+    ",", " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t", 
+    RowBox[{
+    "Print", "[", "\"\<Check k, iters or \[Lambda]*E[x] < 1\>\"", "]"}]}], 
+   "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.795133056068802*^9, 3.795133130236902*^9}, {
+   3.795133335170515*^9, 3.795133335654801*^9}, 3.79513343145434*^9, {
+   3.7951348785698085`*^9, 3.7951349238379326`*^9}, {3.795135906154827*^9, 
+   3.795135910093458*^9}, {3.7951359449790845`*^9, 3.7951359898231983`*^9}, {
+   3.7951363058784666`*^9, 3.7951363068236628`*^9}, {3.795136813555496*^9, 
+   3.7951368281027164`*^9}},
+ CellLabel->"In[7]:=",ExpressionUUID->"9c65b243-da08-4372-b0d7-f55ae15bad3a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Function evaluation and data exporting", "Subsection",
+ CellChangeTimes->{{3.7939974967666388`*^9, 3.793997513440598*^9}, {
+  3.7939977597423067`*^9, 
+  3.7939977646623936`*^9}},ExpressionUUID->"3b626b52-b5ac-4e5b-bcb6-\
+a571b7cc0f58"],
+
+Cell[BoxData[
+ RowBox[{"ExakLog", "[", 
+  RowBox[{"50", ",", " ", "1", ",", " ", 
+   RowBox[{"-", "1"}], ",", " ", "0.5", ",", " ", "51"}], "]"}]], "Input",
+ CellChangeTimes->{{3.795133146114515*^9, 3.795133151205795*^9}, {
+  3.79513320252874*^9, 3.7951332170529757`*^9}, {3.7951332974647903`*^9, 
+  3.7951332990738463`*^9}, {3.795134930110614*^9, 3.795134960914928*^9}, {
+  3.7951361317689695`*^9, 3.7951361473769007`*^9}},
+ CellLabel->"In[12]:=",ExpressionUUID->"798140f1-2af3-4813-855a-8fd7f1629f51"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Deterministic", "Section",
+ CellChangeTimes->{{3.7939973500815163`*^9, 
+  3.79399738484744*^9}},ExpressionUUID->"6dc8c7ba-a566-48ac-8d67-\
+32079f5ff27b"],
+
+Cell[CellGroupData[{
+
+Cell["Function definition", "Subsection",
+ CellChangeTimes->{{3.7939974967666388`*^9, 3.793997513440598*^9}, {
+  3.7939977597423067`*^9, 3.7939977646623936`*^9}, {3.7939978120582438`*^9, 
+  3.793997813783082*^9}},ExpressionUUID->"60736981-7aa9-4281-a217-\
+b3da9a914303"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"akDet", "[", 
+   RowBox[{"k_", ",", " ", "\[Lambda]_", ",", " ", "d_"}], "]"}], ":=", " ", 
+  RowBox[{
+   SubsuperscriptBox["\[Integral]", "0", "\[Infinity]"], 
+   RowBox[{
+    FractionBox[
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[Lambda]", " ", "x"}], ")"}], "k"], 
+     RowBox[{"k", "!"}]], 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{
+      RowBox[{"-", "\[Lambda]"}], " ", "x"}]], 
+    RowBox[{"DiracDelta", "[", 
+     RowBox[{"x", "-", "d"}], "]"}], 
+    RowBox[{"\[DifferentialD]", "x"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ExakDet", "[", 
+   RowBox[{"k_", ",", " ", "\[Lambda]_", ",", " ", "d_", ",", " ", "iters_"}],
+    "]"}], ":=", " ", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"k", "+", "1"}], " ", "\[LessEqual]", " ", "iters"}], " ", 
+     "\[And]", " ", 
+     RowBox[{"0", "<", " ", 
+      RowBox[{
+       RowBox[{"Mean", "[", 
+        RowBox[{"PoissonDistribution", "[", "\[Lambda]", "]"}], "]"}], "*", 
+       " ", "d"}], " ", "<", " ", "1"}]}], ",", " ", "\[IndentingNewLine]", 
+    "\t\t\t\t\t\t\t\t", 
+    RowBox[{"Export", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", 
+         RowBox[{"StringJoin", "[", 
+          RowBox[{"\"\<akDet_\>\"", ",", " ", 
+           RowBox[{"ToString", "[", "k", "]"}], ",", " ", "\"\<_\>\"", ",", 
+           " ", 
+           RowBox[{"ToString", "[", "\[Lambda]", "]"}], ",", " ", "\"\<_\>\"",
+            ",", " ", 
+           RowBox[{"ToString", "[", "d", "]"}], ",", " ", "\"\<_\>\"", ",", 
+           " ", 
+           RowBox[{"ToString", "[", "iters", "]"}], ",", " ", 
+           "\"\<.txt\>\""}], "]"}]}], "}"}], "]"}], ",", " ", 
+      "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<# Poisson lambda\>\"", ",", " ", "\[Lambda]", ",", " ", 
+          "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          "\"\<# Distribution E[x]\>\"", ",", " ", 
+          RowBox[{"N", "[", 
+           RowBox[{"d", ",", " ", "16"}], "]"}], ",", " ", 
+          "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          "\"\<# Number of states to compute\>\"", ",", " ", "iters", ",", 
+          " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t   ", 
+          RowBox[{"\"\<# ak Values from 0 to \>\"", "<>", 
+           RowBox[{"ToString", "[", "k", "]"}]}]}], "}"}], ",", 
+        RowBox[{"N", "[", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"akDet", "[", 
+             RowBox[{"i", ",", " ", "\[Lambda]", ",", " ", "d"}], "]"}], ",", 
+            " ", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", " ", "0", ",", " ", "k"}], "}"}]}], "]"}], ",",
+           " ", "16"}], "]"}]}], "]"}], ",", " ", "\"\<Table\>\""}], "]"}], 
+    ",", " ", "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t", 
+    RowBox[{
+    "Print", "[", "\"\<Check k, iters or \[Lambda]*E[x] < 1\>\"", "]"}]}], 
+   "\[IndentingNewLine]", "\t\t\t\t\t\t\t\t", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.794850747687872*^9, 3.7948507487034225`*^9}, {
+  3.795133377252099*^9, 3.7951334081159315`*^9}, {3.795133452928333*^9, 
+  3.7951334529908185`*^9}, {3.79513500820613*^9, 3.795135024724848*^9}, {
+  3.79513534758195*^9, 3.7951353481755714`*^9}, {3.795135913879218*^9, 
+  3.7951359211332684`*^9}, {3.7951360061787815`*^9, 3.795136035276278*^9}, {
+  3.795136244280709*^9, 3.7951362485924873`*^9}, {3.795136839823449*^9, 
+  3.7951368556118526`*^9}},
+ CellLabel->"In[9]:=",ExpressionUUID->"b43e06bf-2ad8-4b66-b1c7-a34ff33bf148"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Function evaluation and data exporting", "Subsection",
+ CellChangeTimes->{{3.7939974967666388`*^9, 3.793997513440598*^9}, {
+  3.7939977597423067`*^9, 
+  3.7939977646623936`*^9}},ExpressionUUID->"d0a866c4-ee79-4327-937b-\
+40149fb66b97"],
+
+Cell[BoxData[
+ RowBox[{"ExakDet", "[", 
+  RowBox[{"50", ",", " ", "1", ",", " ", "0.5", ",", " ", "51"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.794850755548526*^9, 3.7948507643672285`*^9}, {
+  3.795135070081927*^9, 3.795135098684534*^9}, {3.7951352782587724`*^9, 
+  3.795135278821081*^9}},
+ CellLabel->"In[11]:=",ExpressionUUID->"8e725a02-8a47-4ef3-9d8c-799b689bb7e7"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1920, 997},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+DefaultNaturalLanguage->"English",
+FrontEndVersion->"12.0 para Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 428, 10, 96, "Title",ExpressionUUID->"81cfb96c-65eb-4bf5-843f-c5d881430373"],
+Cell[1011, 34, 193, 6, 57, "Author",ExpressionUUID->"7c54fbdf-16f3-4e1d-ad4b-fef727f266b8"],
+Cell[CellGroupData[{
+Cell[1229, 44, 224, 4, 67, "Section",ExpressionUUID->"ebbc57ac-e561-4289-a950-446841c04228"],
+Cell[CellGroupData[{
+Cell[1478, 52, 171, 3, 53, "Subsection",ExpressionUUID->"139538ad-8aa4-4547-af51-c9a2d0564589"],
+Cell[1652, 57, 5614, 116, 206, "Input",ExpressionUUID->"2e520163-3898-46b4-9d5f-40954224f2a2"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7303, 178, 241, 4, 53, "Subsection",ExpressionUUID->"87b7bb02-d05e-4cf6-b656-86e98816a31e"],
+Cell[7547, 184, 501, 8, 28, "Input",ExpressionUUID->"7a9393b3-35d0-410a-ab22-6f992e445247"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8097, 198, 217, 4, 67, "Section",ExpressionUUID->"8f16fd3f-aa81-40b8-a068-d31e1cf8c90f"],
+Cell[CellGroupData[{
+Cell[8339, 206, 171, 3, 53, "Subsection",ExpressionUUID->"03f94dca-49d0-4fae-ae2c-11a13580f7f3"],
+Cell[8513, 211, 4119, 97, 206, "Input",ExpressionUUID->"717444fe-6f69-42e4-8394-cfb7a14b21a2"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12669, 313, 241, 4, 53, "Subsection",ExpressionUUID->"cdc950a4-79f3-48bb-b813-861154d19482"],
+Cell[12913, 319, 615, 10, 28, "Input",ExpressionUUID->"2ba7c434-af7d-4950-b86b-57829ba9f717"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13577, 335, 220, 4, 67, "Section",ExpressionUUID->"885a8365-5193-4a4f-a268-b5432709e52d"],
+Cell[CellGroupData[{
+Cell[13822, 343, 270, 4, 53, "Subsection",ExpressionUUID->"be120c61-d743-4656-a8a7-f796dcb08ebd"],
+Cell[14095, 349, 4302, 100, 206, "Input",ExpressionUUID->"9c65b243-da08-4372-b0d7-f55ae15bad3a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18434, 454, 241, 4, 53, "Subsection",ExpressionUUID->"3b626b52-b5ac-4e5b-bcb6-a571b7cc0f58"],
+Cell[18678, 460, 503, 8, 28, "Input",ExpressionUUID->"798140f1-2af3-4813-855a-8fd7f1629f51"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19230, 474, 159, 3, 67, "Section",ExpressionUUID->"6dc8c7ba-a566-48ac-8d67-32079f5ff27b"],
+Cell[CellGroupData[{
+Cell[19414, 481, 270, 4, 53, "Subsection",ExpressionUUID->"60736981-7aa9-4281-a217-b3da9a914303"],
+Cell[19687, 487, 3759, 86, 206, "Input",ExpressionUUID->"b43e06bf-2ad8-4b66-b1c7-a34ff33bf148"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23483, 578, 241, 4, 53, "Subsection",ExpressionUUID->"d0a866c4-ee79-4327-937b-40149fb66b97"],
+Cell[23727, 584, 372, 7, 28, "Input",ExpressionUUID->"8e725a02-8a47-4ef3-9d8c-799b689bb7e7"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
