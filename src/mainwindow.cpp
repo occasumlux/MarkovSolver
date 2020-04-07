@@ -308,6 +308,7 @@ void MainWindow::on_solveButton_clicked()
     double lambda_max = 1;
 
     Eigen::MatrixXd* pi_matrix_h = new Eigen::MatrixXd(iters, dims);
+    *pi_matrix_h = Eigen::MatrixXd::Zero(iters, dims);
     pi_matrix_h->row(0) = pi_vector;
 
     if (current_mode == "CMPC") {
@@ -345,6 +346,7 @@ void MainWindow::on_solveButton_clicked()
 
     if (current_mode == "CMPC") {
         Eigen::MatrixXd* pi_f = new Eigen::MatrixXd(partitions, dims);
+        *pi_f = Eigen::MatrixXd::Zero(partitions, dims);
         for (int i = 0; i < iters; ++i) {
             for (int k = 0; k < partitions; ++k) {
                 pi_f->row(k) += pi_matrix_h->row(i) * poisson(i, lambda_t * (k + 1)/partitions);
@@ -431,6 +433,7 @@ void MainWindow::on_actionM_M_m_triggered()
 
         // Compute probabilities
         Eigen::MatrixXd* pi_vector_queue = new Eigen::MatrixXd(k + 1, 1);
+        *pi_vector_queue = Eigen::MatrixXd::Zero(k + 1, 1);
         pi_vector_queue->coeffRef(0,0) = 0;
         // pi_0 calculation
         pi_vector_queue->coeffRef(0,0) += 1;
@@ -480,6 +483,7 @@ void MainWindow::on_action_M_Er_1_triggered()
         // Compute probabilities
         // Result vector, for number of users
         Eigen::MatrixXd* pi_vector_queue = new Eigen::MatrixXd(k + 1, 1);
+        *pi_vector_queue = Eigen::MatrixXd::Zero(k + 1, 1);
         // Temporary vector, for number of remaining stages
         Eigen::MatrixXd pi_vector_queue_t = Eigen::MatrixXd::Zero(stages + 1, 1);
         // pi_0 calculation (both)
@@ -617,6 +621,7 @@ void MainWindow::on_actionM_G_1_triggered()
 
     // pi vector definition
     Eigen::MatrixXd* pi_vector_queue = new Eigen::MatrixXd(iters + 1, 1);
+    *pi_vector_queue = Eigen::MatrixXd::Zero(iters + 1, 1);
     pi_vector_queue->coeffRef(0,0) = 1 - lambda * e_x;
 
     //pi vector calculation
