@@ -14,7 +14,7 @@ class TableView : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit TableView(QWidget *parent = nullptr, Eigen::MatrixXd pi_matrix_h = Eigen::MatrixXd());
+    explicit TableView(QWidget *parent = nullptr, const Eigen::MatrixXd* pi_matrix_h = nullptr);
     ~TableView();
 
 private slots:

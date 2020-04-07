@@ -25,7 +25,7 @@ private slots:
 
 private:
     Ui::BarChartWindow *ui;
-    Eigen::MatrixXd* pi_matrix_h;
+    const Eigen::MatrixXd* pi_matrix_h;
     QSpinBox* spinbox;
 };
 

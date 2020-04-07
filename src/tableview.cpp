@@ -13,7 +13,7 @@
 //#include <limits>
 #include <QDebug>
 
-TableView::TableView(QWidget *parent, Eigen::MatrixXd pi_matrix_h) :
+TableView::TableView(QWidget *parent, const Eigen::MatrixXd* pi_matrix_h) :
     QMainWindow(parent),
     ui(new Ui::TableView)
 {
@@ -25,8 +25,8 @@ TableView::TableView(QWidget *parent, Eigen::MatrixXd pi_matrix_h) :
     QObject::connect(button, &QPushButton::clicked,
                      this, &TableView::saveCSV);
 
-    int cols = pi_matrix_h.cols();
-    int rows = pi_matrix_h.rows();
+    int cols = pi_matrix_h->cols();
+    int rows = pi_matrix_h->rows();
 
     //std::cout << rows << "," << cols << std::endl;
 
@@ -36,7 +36,7 @@ TableView::TableView(QWidget *parent, Eigen::MatrixXd pi_matrix_h) :
     for (int col = 0; col < cols; ++col) {
         for (int row = 0; row < rows; ++row) {
             //QString value = QString("%1").arg(pi_matrix_h(row, col));
-            QString value2 = QString::number(pi_matrix_h(row, col), 'f', 10); // std::numeric_limits<double>::digits10 + 1);
+            QString value2 = QString::number(pi_matrix_h->coeff(row, col), 'f', 10); // std::numeric_limits<double>::digits10 + 1);
             //qDebug() << value << "\n";
             //qDebug() << value2 << "\n";
             QStringList splitted = value2.split('.');

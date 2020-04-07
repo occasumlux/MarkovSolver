@@ -4,7 +4,7 @@
 #include <QVector>
 #include <iostream>
 
-BarChartWindow::BarChartWindow(QWidget *parent, Eigen::MatrixXd *_pi_matrix_h) :
+BarChartWindow::BarChartWindow(QWidget *parent, Eigen::MatrixXd* _pi_matrix_h) :
     QMainWindow(parent),
     ui(new Ui::BarChartWindow),
     pi_matrix_h(_pi_matrix_h),
@@ -56,6 +56,7 @@ BarChartWindow::BarChartWindow(QWidget *parent, Eigen::MatrixXd *_pi_matrix_h) :
 
 BarChartWindow::~BarChartWindow()
 {
+    delete pi_matrix_h;
     delete ui;
 }
 
